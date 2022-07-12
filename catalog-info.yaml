@@ -1,0 +1,28 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: greenroom
+  description: An example of a Backstage application.
+  # Example for optional annotations
+  # annotations:
+  #   github.com/project-slug: backstage/backstage
+  #   backstage.io/techdocs-ref: dir:.
+spec:
+  type: website
+  owner: john@example.com
+  lifecycle: experimental
+
+---
+
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "Knowledge"
+  description: "A knowledge repository of docs and other stuff"
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    # github.com/project-slug: adamstrickland/knowlege_repo
+spec:
+  type: documentation
+  lifecycle: experimental
+  owner: "acme-corp"

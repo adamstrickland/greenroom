@@ -1,0 +1,6 @@
+site_name: Knowledge
+nav:
+  - Home: index.md
+  - About: about.md
+plugins:
+  - techdocs-core
