@@ -1,0 +1,19 @@
+
+---
+version: "3.7"
+
+volumes:
+  postgres-volume:
+
+services:
+  db:
+    image: postgres
+    environment:
+      ENCODING: "UTF8"
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PSQL_TRUST_LOCALNET: "true"
+    volumes:
+      - postgres-volume:/var/lib/postgresql/data
+    ports:
+      - 5432
