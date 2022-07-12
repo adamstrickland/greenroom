@@ -1,0 +1,112 @@
+app:
+  title: Greenroom
+  baseUrl: http://${BACKSTAGE_FRONTEND_HOST}:${BACKSTAGE_FRONTEND_PORT}
+
+organization:
+  name: Hopin
+
+backend:
+  # Used for enabling authentication, secret is shared by all backend plugins
+  # See https://backstage.io/docs/tutorials/backend-to-backend-auth for
+  # information on the format
+  # auth:
+  #   keys:
+  #     - secret: ${BACKEND_SECRET}
+  baseUrl: http://${BACKSTAGE_BACKEND_HOST}:${BACKSTAGE_BACKEND_PORT}
+  listen:
+    port: ${BACKSTAGE_BACKEND_PORT}
+    # Uncomment the following host directive to bind to all IPv4 interfaces and
+    # not just the baseUrl hostname.
+    # host: 0.0.0.0
+  csp:
+    connect-src: ["'self'", 'http:', 'https:']
+    # Content-Security-Policy directives follow the Helmet format: https://helmetjs.github.io/#reference
+    # Default Helmet Content-Security-Policy values can be removed by setting the key to false
+  cors:
+    origin: http://${BACKSTAGE_FRONTEND_HOST}:${BACKSTAGE_FRONTEND_PORT}
+    methods: [GET, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      password: ${POSTGRES_PASSWORD}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+  cache:
+    store: memory
+  # reading:
+  #   allow:
+  #     - githubusercontent.com
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+proxy:
+  '/test':
+    target: 'https://example.com'
+    changeOrigin: true
+
+techdocs:
+  builder: local
+  generator:
+    runIn: docker
+  publisher:
+    type: local
+
+auth:
+  providers:
+    github:
+      development:
+        clientId: ${OAUTH_CLIENT_ID}
+        clientSecret: ${OAUTH_CLIENT_SECRET}
+
+scaffolder:
+  # see https://backstage.io/docs/features/software-templates/configuration for software template options
+
+catalog:
+  import:
+    entityFilename: catalog-info.yaml
+    pullRequestBranchName: backstage-integration
+  rules:
+    - allow:
+        - API
+        - Component
+        - Location
+        - Resource
+        - System
+        - Template
+  locations:
+    - type: file
+      target: ../../examples/entities.yaml
+    - type: file
+      target: ../../examples/template/template.yaml
+      rules:
+        - allow: 
+            - Template
+    - type: file
+      target: ../../examples/org.yaml
+      rules:
+        - allow:
+            - User
+            - Group
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/all.yaml
+    - type: url
+      target: https://github.com/backstage/backstage/blob/master/packages/catalog-model/examples/acme-corp.yaml
+      rules:
+        - allow:
+            - User
+            - Group
+    - type: url
+      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/docs-template/template.yaml
+      rules:
+        - allow:
+            - Template
+    - type: url
+      target: https://github.com/backstage/software-templates/blob/main/scaffolder-templates/rails-demo/template.yaml
+      rules:
+        - allow:
+            - Template
